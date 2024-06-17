@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+        
+    </script>
+</head>
+<body>
+    
+    <div id="message_container" style="display:block; width:600px; border:1px solid black; white-space: pre-wrap;"><br><br></div>
+    <input type="text" id="test" style="height: 50px; width: 600px;">
+    <input type="submit" id="my_button" value="질문하기">
+
+    <script type="text/javascript" charset="utf-8">
+
+        //  이건 Flask 와 할 때.
+
+        // GET
+
+        document.getElementById('my_button').addEventListener('click', function() {  //버튼 클릭하면 source.onmessage 작동 (get reqeust와 같고, 3차례에 걸쳐 답을 기다림)
+            var question0 =  $("#test").val();
+            question0 = encodeURIComponent(question0); // '#' '&' 등의 특수문자를 인코딩. URL 길이 제한(약 2000자) 있음
+            var source = new EventSource("http://165.132.142.56:5281/stream?data="+ question0);  // " " 안에 "서버 주소/stream?data=" 들어감
+
+            source.onmessage = function(event) {
+                var dataWithReplacedSpaces = event.data.replace(/●/g, ' ').replace(/\\n/g,'<br>');
+                console.log(event.data)
+                document.getElementById("message_container").innerHTML += dataWithReplacedSpaces ;  // Display the server's updates
+                
+                if (event.data == 'end'){ // 'end' 응답이 오면 닫음
+                    source.close();    
+                }else if (event.data =='error'){  // 에러 처리
+                    console.log('에러')
+                };
+            };
+
+        });
+
+        
+        let input0 = document.getElementById("test");
+        input0.addEventListener("keyup",function(event){
+        if (event.keyCode === 13){
+            event.preventDefault();
+            document.getElementById("my_button").click();
+        }
+        });
+        
+    </script>
+</body>
+</html>

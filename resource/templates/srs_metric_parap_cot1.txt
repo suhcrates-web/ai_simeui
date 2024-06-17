@@ -1,0 +1,6 @@
+{srs_text}
+--------------
+
+Instruction: 위 두 document는 SRS에 대한 GPT의 적정성 평가([Predicted]) 와 사람이 직접 작성한 적정성 평가(Human Label) 이야. 너가 할일은 Predicted의 내용이 Human Label의 내용을 얼마나 포함하는지 평가하는거야. 그 포함하는 정도를 0~1 사이의 소수로 나타내줘. Human Label 외의 내용이 Predicted에 있는 것은 괜찮아. 다음 순서에 따라 평가를 내려줘.
+1) Human Label에 만약 여러가지의 내용이 있다면, 각 항목별로 그 내용이 Predicted 안에 담겨있는지 rationale을 작성해줘. 완전히 일치하지 않아도, 비슷한 내용이라면 괜찮아.
+2) Human Label의 내용이 Predicted에 얼마나 포함돼있는지, 1에서 추론한 그 정도를 0~1 사이의 소수로 나타내줘. 작성 포맷은 <[Number]> 이렇게 <> 안에 넣어줘. Ex) <0.3>

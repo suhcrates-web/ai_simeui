@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #message_container {
+            width: 600px;
+            max-width: 600px;
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 10px;
+            margin-top: 20px;
+            overflow-y: auto;
+            height: 600px;
+        }
+        #test, #my_button {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+        #my_button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #my_button:hover {
+            background-color: #0056b3;
+        }
+        #buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Optional: to center-align the buttons */
+            gap: 10px; /* Optional: adds space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="buttons"></div>
+    </div>
+    <div>
+        <div id="message_container"></div>
+        <textarea id="test" placeholder="Type your question here..." rows="10" cols="50"></textarea>
+        <!-- <input type="text" id="test" placeholder="Type your question here..."> -->
+        <input type="submit" id="my_button" value="심의 작성">
+    </div>
+
+    <div id="popup_box1" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 300px; background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0px 0px 10px rgba(0,0,0,0.5); z-index: 1000;">
+        <p id="popup_message1">심의</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <div id="popup_box2" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 300px; background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0px 0px 10px rgba(0,0,0,0.5); z-index: 1000;">
+        <p id="popup_message2">심의</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <div id="popup_box3" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 300px; background: white; border: 1px solid #ccc; padding: 20px; box-shadow: 0px 0px 10px rgba(0,0,0,0.5); z-index: 1000;">
+        <p id="popup_message3">심의</p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script type="text/javascript">
+document.getElementById('my_button').addEventListener('click', function() {
+    var question = $("#test").val();
+    question = encodeURIComponent(question);
+    var source = new EventSource("http://165.132.142.56:5284/stream?data=" + question);
+    var messageContainer = document.getElementById("message_container");
+    var buttons = document.getElementById("buttons");
+
+    source.onmessage = function(event) {
+        if (event.data === 'end' || event.data === 'error') {
+            source.close();
+        }else if (event.data.includes('<심의1>')){
+            var btn = document.createElement("button")
+            // var btnHTML = '<button id="sim1"><심의1></button>';
+            // var btnHTML = '<button id="sim1" class="alert-button" data-alert="' + sim1 + '"><심의1></button>';
+            btn.id = "sim1";
+            btn.innerHTML = "<심의1>";
+            buttons.appendChild(btn)
+            // messageContainer.innerHTML += btnHTML;
+            var sim1 = event.data.replace(/<br>/g,'\n');
+            document.getElementById("sim1").addEventListener("click", function() {
+            alert(sim1); // Simple alert popup
+            });
+        } else if (event.data.includes('<심의2>')){
+            var btn = document.createElement("button")
+            // var btnHTML = '<button id="sim2" class="alert-button" data-alert="' + sim2 + '"><심의2></button>';
+            btn.id = "sim2";
+            btn.innerHTML = "<심의2>";
+            buttons.appendChild(btn)
+            var sim2 = event.data.replace(/<br>/g,'\n');
+            document.getElementById("sim2").addEventListener("click", function() {
+            alert(sim2); // Simple alert popup
+            });
+
+        } else if (event.data.includes('<심의3>')){
+            var btn = document.createElement("button")
+            // var btnHTML = '<button id="sim3" class="alert-button" data-alert="' + sim3 + '"><심의3></button>';
+            btn.id = "sim3";
+            btn.innerHTML = "<심의3>";
+            buttons.appendChild(btn)
+            var sim3 = event.data.replace(/<br>/g,'\n');
+            document.getElementById("sim3").addEventListener("click", function() {
+            alert(sim3); // Simple alert popup
+            });
+
+        } else if (event.data.includes('<비판1>')){
+            var btn = document.createElement("button")
+            // var btnHTML = '<button id="sim3" class="alert-button" data-alert="' + sim3 + '"><심의3></button>';
+            btn.id = "adv1";
+            btn.innerHTML = "<비판1>";
+            buttons.appendChild(btn)
+            var adv1 = event.data.replace(/<br>/g,'\n');
+            document.getElementById("adv1").addEventListener("click", function() {
+            alert(adv1); // Simple alert popup
+            });
+
+        } else if (event.data.includes('<비판2>')){
+            var btn = document.createElement("button")
+            // var btnHTML = '<button id="sim3" class="alert-button" data-alert="' + sim3 + '"><심의3></button>';
+            btn.id = "adv2";
+            btn.innerHTML = "<비판1>";
+            buttons.appendChild(btn)
+            var adv1 = event.data.replace(/<br>/g,'\n');
+            document.getElementById("adv2").addEventListener("click", function() {
+            alert(adv1); // Simple alert popup
+            });
+
+        }else {
+            var dataWithReplacedSpaces = event.data.replace(/●/g, ' ').replace(/\\n/g,'<br>');
+            messageContainer.innerHTML += dataWithReplacedSpaces;
+            scrollToBottom(messageContainer);
+        }
+    };
+});
+
+messageContainer.addEventListener('click', function(e) {
+    if (e.target.classList.contains('alert-button')) {
+        alert(e.target.dataset.alert);
+    }
+});
+
+
+function closePopup(idx) {
+    document.getElementById('popup_box' + idx).style.display = 'none';
+}
+
+document.getElementById("test").addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("my_button").click();
+    }
+});
+
+function scrollToBottom(element) {
+    element.scrollTop = element.scrollHeight;
+}
+    </script>
+</body>
+</html>
